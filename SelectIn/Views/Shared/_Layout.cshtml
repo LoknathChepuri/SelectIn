@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@inject Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper Html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SelectIn</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SelectIn.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-0 fixed-top py-0"
+            style="min-height:24px; font-size:0.85rem;line-height:1.1;">
+            <div class="container-fluid">
+                <a class="navbar-brand py-0" asp-area="" asp-controller="Home" asp-action="Index"
+                    style="font-size:0.9rem;line-height:1.1;">Saree Select</a>
+                <ul class="navbar-nav flex-row flex-wrap ms-auto w-100 justify-content-end" style="gap:0.5rem;">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark @((ViewContext.RouteData.Values["action"] as string == "Index") ? "active" : "")"
+                            asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark @((ViewContext.RouteData.Values["action"] as string == "OrderGuidelines") ? "active" : "")"
+                            asp-area="" asp-controller="Home" asp-action="OrderGuidelines">Book a Selection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark @((ViewContext.RouteData.Values["action"] as string == "DeliveryAreas") ? "active" : "")"
+                            asp-area="" asp-controller="Home" asp-action="DeliveryAreas">Delivery Areas</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid px-0 main-content-area" style="padding-top:28px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="footer bg-dark text-white-50 mt-4">
+        <div class="container text-center py-1">
+            <span class="fw-bold">&copy; 2025 Saree Select</span>
+            <span class="d-block d-md-inline">| Local Saree Selection &amp; Home Trial Platform</span><br />
+            <span class="small d-block mt-1"
+                style="white-space:normal;word-break:break-word;">Delivery: Moosarambagh, Dilsukhnagar, L.B. Nagar, Uppal, Kothapet, Nagole, Malakpet &amp; nearby areas (within 40–50 km)
+            </span>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

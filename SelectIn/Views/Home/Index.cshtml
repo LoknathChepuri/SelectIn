@@ -1,0 +1,1071 @@
+﻿@{
+    ViewData["Title"] = "Saree Select – Home Selection Platform";
+}
+<div class="container my-4 mt-5 bg-white bg-gradient-shop rounded-4 shadow-lg p-3 p-md-4" style="max-width:1200px;">
+    <h1 class="display-5 fw-bold text-center mb-3" style="color:#7b4397; letter-spacing:1px;">Saree Select</h1>
+    <p class="lead text-center mb-4" style="color:#4b006e;">Select up to 10 sarees online and request a <b>Home Selection</b> in Hyderabad!</p>
+    <div id="category-buttons" class="mb-4 text-center"></div>
+    <section class="mb-5">
+        <h2 id="category-title" class="h4 mb-4 text-center"></h2>
+        <div id="product-grid" class="row row-cols-2 row-cols-md-4 g-4 justify-content-center"></div>
+        <nav id="pagination-nav" class="mt-4"></nav>
+    </section>
+</div>
+<!-- Modal for product gallery -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-carousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner" id="modal-carousel-inner"></div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#modal-carousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#modal-carousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="fw-semibold text-success" id="modal-price"></div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+// --- Static manifest for categories and products ---
+const catalog = [
+    {
+        name: "Silk Sarees",
+        products: [
+            {
+                code: "SR101",
+                title: "Elegant Red Silk",
+                price: 2499,
+                originalPrice: 2999,
+                images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+            },
+            {
+                code: "SR102",
+                title: "Classic Blue Silk",
+                price: 2599,
+                originalPrice: 2999,
+                images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+            },
+                    {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    },
+                            {
+                        code: "SR101",
+                        title: "Elegant Red Silk",
+                        price: 2499,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_1.1.jpeg", "/Images/Silk Sarees/Product_1.2.jpeg", "/Images/Silk Sarees/Product_1.3.jpeg"]
+                    },
+                    {
+                        code: "SR102",
+                        title: "Classic Blue Silk",
+                        price: 2599,
+                        originalPrice: 2999,
+                        images: ["/Images/Silk Sarees/Product_2.1.jpeg", "/Images/Silk Sarees/Product_2.2.jpeg", "/Images/Silk Sarees/Product_2.3.jpeg"]
+                    }
+        ]
+    },
+    {
+        name: "Cotton Sarees",
+        products: [
+            {
+                code: "SR201",
+                title: "Festive Green Cotton",
+                price: 1899,
+                images: ["/Images/Cotton Sarees/Product_3.1.jpeg", "/Images/Cotton Sarees/Product_3.2.jpeg"]
+            },
+            {
+                code: "SR202",
+                title: "Trendy Yellow Cotton",
+                price: 1799,
+                images: ["/Images/Cotton Sarees/Product_4.1.jpeg"]
+            }
+        ]
+    },
+    {
+        name: "Pattu Sarees",
+        products: [
+            {
+                code: "SR301",
+                title: "Royal Purple Pattu",
+                price: 3999,
+                images: ["/Images/Pattu Sarees/Product_5.1.jpeg"]
+            }
+        ]
+    }
+];
+const pageSize = 10;
+let selectedCategory = catalog[0].name;
+let currentPage = 1;
+
+function renderCategories() {
+    const catDiv = document.getElementById('category-buttons');
+    catDiv.innerHTML = '';
+    catalog.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-outline-primary mb-2 mx-1' + (cat.name === selectedCategory ? ' active' : '');
+        btn.textContent = cat.name;
+        btn.onclick = () => { selectedCategory = cat.name; currentPage = 1; renderProducts(); renderCategories(); };
+        catDiv.appendChild(btn);
+    });
+}
+
+function renderProducts() {
+    const cat = catalog.find(c => c.name === selectedCategory);
+    const products = cat ? cat.products : [];
+    const grid = document.getElementById('product-grid');
+    const title = document.getElementById('category-title');
+    title.textContent = selectedCategory;
+    grid.innerHTML = '';
+    // Pagination
+    const totalPages = Math.ceil(products.length / pageSize);
+    const paged = products.slice((currentPage-1)*pageSize, currentPage*pageSize);
+    paged.forEach((saree, i) => {
+        const col = document.createElement('div');
+        col.className = 'col';
+        col.innerHTML = `
+        <div class="card h-100 shadow-sm border-0">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#productModal" onclick="showModal('${selectedCategory}',${(currentPage-1)*pageSize+i})">
+                <img src="${saree.images[0]}" class="product-img-square card-img-top mx-auto d-block" alt="${saree.title}" />
+            </a>
+            <div class="card-body p-2 text-center">
+                <h5 class="card-title mb-1" style="font-size:1.1rem;">${saree.title}</h5>
+                <div class="mb-1"><span class="badge bg-secondary">${saree.code}</span></div>
+                <div class="fw-semibold text-success mb-1">
+                    ₹${saree.price}
+                    ${saree.originalPrice && saree.originalPrice > saree.price
+                        ? `<span class='text-muted' style='text-decoration:line-through;font-weight:400;font-size:0.95em;'>₹${saree.originalPrice}</span>`
+                        : ""}
+                </div>
+            </div>
+        </div>`;
+        grid.appendChild(col);
+    });
+    // Pagination nav
+    const nav = document.getElementById('pagination-nav');
+    nav.innerHTML = '';
+    if (totalPages > 1) {
+        let ul = document.createElement('ul');
+        ul.className = 'pagination justify-content-center';
+        for (let p = 1; p <= totalPages; p++) {
+            let li = document.createElement('li');
+            li.className = 'page-item' + (p === currentPage ? ' active' : '');
+            let a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#';
+            a.textContent = p;
+            a.onclick = (e) => { e.preventDefault(); currentPage = p; renderProducts(); window.scrollTo({top:document.querySelector('.main-content-area')?.offsetTop||0, left:0, behavior:'smooth'}); };
+            li.appendChild(a);
+            ul.appendChild(li);
+        }
+        nav.appendChild(ul);
+        grid.style.marginBottom = '';
+    } else {
+        // Add margin if no pagination
+        grid.style.marginBottom = '5rem';
+    }
+}
+
+window.showModal = function(category, index) {
+    const cat = catalog.find(c => c.name === category);
+    const saree = cat.products[index];
+    document.getElementById('productModalLabel').textContent = saree.title + ' (' + saree.code + ')';
+    document.getElementById('modal-price').textContent = 'Price: ₹' + saree.price;
+    const carouselInner = document.getElementById('modal-carousel-inner');
+    carouselInner.innerHTML = '';
+    saree.images.forEach((img, i) => {
+        const div = document.createElement('div');
+        div.className = 'carousel-item' + (i === 0 ? ' active' : '');
+        div.innerHTML = `<img src="${img}" class="d-block mx-auto" style="width:350px;height:350px;object-fit:cover;" alt="${saree.title} image ${i+1}">`;
+        carouselInner.appendChild(div);
+    });
+    // Reset carousel to first image
+    var carousel = bootstrap.Carousel.getOrCreateInstance(document.getElementById('modal-carousel'));
+    carousel.to(0);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderCategories();
+    renderProducts();
+});
+</script>
+}
